@@ -135,7 +135,7 @@ int GetElement(Node *pList, int pos)
 		exit(1);
 	}
 	size = SizeList(pList);
-	if(0 > pos || (size - 1) <= pos)
+	if(0 > pos || (size - 1) < pos)
 	{
 		printf("pos(%d)数据不合法.\n", pos);
 	}
@@ -278,6 +278,218 @@ int InsertTrail(Node **pList, int value)
 	*pList = pTmp;
 	return 1;
 }
+//向链表中第pos个结点位置插入元素value,成功返回1， 失败返回0
+int InsertNodeWithPos(Node **pList, int pos, int value)
+{
+	Node *pHead = NULL;
+	pHead = *pList;
+	if(NULL == pHead)
+	{
+		printf("链表为空.\n");
+		exit(1);
+	}
+	Node *pNode = pHead;
+	int size = SizeList(pHead);
+	if(0 > pos || pos > size - 1)
+	{
+		printf("pos(%d)不合法\n", pos);
+		exit(1);
+	}
+	if(0 == pos)
+	{
+		return InsertHead(pList ,value);
+	}
+	else if(size - 1 == pos)
+	{
+		return InsertTrail(pList, value);
+	}
+	int index = 0;
+	while(pHead)
+	{
+		index++;
+		if(pos - 1 == index)
+			break;
+		pHead = pHead->next;
+	}
+	if(index < pos - 1)
+	{
+		printf("pos(%d) 不合法.\n", pos);
+		exit(1);
+	}
+	else
+	{
+		Node *pInsertNode = (Node *)malloc(sizeof(Node));
+		if(NULL == pInsertNode)
+		{
+			printf("内存分配失败.\n");
+			exit(1);
+		}
+		memset(pInsertNode, 0, sizeof(Node));
+		pInsertNode->element = value;
+		pInsertNode->next = pHead->next;
+		pHead->next = pInsertNode;
+		*pList = pNode;
+	}
+
+
+	return 1;
+}
+//向有序链表中插入元素value结点，使得插入后仍然有序
+void InsertNodeWithSortedList(Node **pList, int value)
+{
+	
+}
+//从链表中删除头结点,并返回该结点的值，若删除失败择停止程序运行
+int RemoveHead(Node **pList)
+{
+	Node *pHead;
+	Node *pNode;
+
+	pHead = *pList;
+	if(NULL == pHead)
+	{
+		printf("链表为空\n");
+		return 0;
+	}
+	pNode = pHead->next;
+	free(pHead);
+	pHead = pNode;
+	*pList = pHead;
+	return 0;
+}
+//从链表中删除尾结点,并返回该结点的值，若删除失败择停止程序运行
+int RemoveTrail(Node **pList)
+{
+	Node *pHead = *pList;
+	if(NULL == pHead)
+	{
+		printf("链表为空.\n");
+		exit(1);
+	}
+	int size = SizeList(pHead);
+	int pos = 0;
+	Node *pNode = pHead;
+	while(pHead)
+	{
+		pos++;
+		if(pos == size - 1)
+			break;
+		pHead = pHead->next;
+	}
+	free(pHead->next);
+	pHead->next = NULL;
+	*pList = pNode;
+	return 0;
+}
+//从链表中删除第pos个结点,并返回该结点的值，若删除失败择停止程序运行
+int RemovePosNode(Node *pList, int pos)
+{
+	Node *pHead = pList;
+	if(NULL == pHead)
+	{
+		printf("链表为空");
+		exit(1);
+	}
+	int size = SizeList(pList);
+	if(0 > pos || (size - 1) < pos)
+	{
+		printf("pos(%d)不合法.\n", pos);
+		exit(1);
+	}
+
+	int index = 0;
+	while(pHead)
+	{
+		if((pos - 1) == ++index)
+			break;
+		pHead = pHead->next;
+	}
+	if(index > size - 1)
+	{
+		exit(1);
+	}
+	Node *pNode = pHead->next->next;
+	free(pHead->next);
+	pHead->next = pNode;
+	return 0;
+}
+//从链表中删除值为value的第一个结点,成功返回1， 失败返回0
+int RemoveNodeWithValue(Node **pList, int value)
+{
+	Node *pHead;
+	pHead = *pList;
+	if(NULL == pHead)
+	{
+		printf("链表为空.\n");
+		exit(1);
+	}
+	if(pHead->element == value)
+	{
+		return RemoveHead(pList);
+	}
+	Node *pTmp = pHead;
+	Node *pNode = NULL;
+	int size = SizeList(pHead);
+	int element = GetElement(pHead, size - 1);
+	int index = 0;
+	while(pHead)
+	{
+		index++;
+		if(pHead->element == value)
+			break;
+		pNode = pHead;
+		pHead = pHead->next;
+	}
+	if(index == size && element == value)
+	{
+		return RemoveTrail(pList);
+	}
+	if(pNode->element == value)
+	{
+		Node *pNext = pHead->next;
+		free(pHead);
+		pNode->next = pNext;
+		*pList = pTmp;
+	}
+
+	return 0;
+}
+//交换2个元素的位置
+void SwapNode(Node **pList, int firstValue, int secondValue)
+{
+
+}
+void SwapNodeWithPos(Node **pList, int firstPos, int secondPos)
+{
+	
+}
+//将线性表进行快速排序
+void QuickSortList(Node **pList)
+{
+
+}
+//链表倒序
+void ReverseList(Node **pList)
+{
+	Node *pHead = NULL;
+	Node *pNode = NULL;
+	Node *pNext = NULL;
+	
+	pHead = *pList;
+	if(NULL == pHead)
+	{
+		printf("链表为空.\n");
+		exit(1);
+	}
+	while(pHead)
+	{
+		pNext = pHead->next;
+		pHead->next = pNode;
+		pNode = pHead;
+		pHead = pNext;
+	}
+	*pList = pNode;
+}
 void ListOperation()
 {
 	Node *pList;
@@ -298,6 +510,24 @@ void ListOperation()
 	PrintList(pList);
 
 	InsertTrail(&pList, 202);
+	PrintList(pList);
+
+	RemoveHead(&pList);
+	PrintList(pList);
+
+	RemoveTrail(&pList);
+	PrintList(pList);
+
+	RemovePosNode(pList, 3);
+	PrintList(pList);
+
+	RemoveNodeWithValue(&pList, 4);
+	PrintList(pList);
+
+	InsertNodeWithPos(&pList, 3, 4444);
+	PrintList(pList);
+
+	ReverseList(&pList);
 	PrintList(pList);
 }
 int main(int argc, const char **argv)
