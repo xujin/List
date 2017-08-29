@@ -917,7 +917,6 @@ int main(int argc, const char * argv[])
     removeTrailNode(&pList);
     removeNodeAtPos(&pList, 3);
     
-    
     printList(pList);
     clearList(pList);
     
